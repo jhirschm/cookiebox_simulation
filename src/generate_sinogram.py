@@ -3,8 +3,10 @@
 import sys
 import numpy as np
 import h5py
+import matplotlib.pyplot as plt
 
 def main():
+    print(sys.argv)
     if len(sys.argv)<2:
         print('syntax:\t%s <outputfilehead> <nimages> <streakamp optional> <nelectrons scale optional>'%(sys.argv[0]))
         return
@@ -29,20 +31,25 @@ def main():
     angles = np.linspace(0,np.pi*2.,nangles+1)
     energies = np.linspace(emin,emax,nenergies+1)
 
-    h5f = h5py.File('%s.simdata.h5'%(outhead),'w')
-    
+    print(outhead)
+    h5f = h5py.File('%s_simdata.h5'%(outhead),'w')
+    # print(h5f)
     for i in range(nimages):
         img = h5f.create_group('img%05i'%i)
 
         img.attrs['npulses'] = int(np.random.uniform(1,4))
+        # print(img.attrs['npulses'])
         img.attrs['esase'] = np.random.normal(ecentral,etotalwidth,(img.attrs['npulses'],))
+        # print(img.attrs['esase'])
         img.attrs['ewidths'] = np.random.gamma(1.5,.125,(img.attrs['npulses'],))+.5
+        # print(img.attrs['ewidths'])
         img.attrs['ephases'] = np.random.uniform(0.,2.*np.pi,(img.attrs['npulses'],))
         # rather than this, let's eventually switch to using a dict for the Auger features and then for every ncounts photoelectron, we pick from this distribution an Auger electron.
         naugerfeatures = {365:1.5,369:1.5,372:1.5}
         caugerfeatures = {250.:3.,255.:2.5,260.:2.5}
         oaugerfeatures = {505:2.5,497:1.,492:1.}
-        augerfeatures = {**naugerfeatures,**caugerfeatures,**oaugerfeatures}
+        augerfeatures = {**naugerfeatures, **caugerfeatures, **oaugerfeatures}
+
         img.create_group('augers')
         for center in list(augerfeatures.keys()):
             img['augers'].attrs['%.2f'%center] = float(augerfeatures[center])
@@ -55,6 +62,7 @@ def main():
             ovalencecenters = {center-41.6 : 0.5}
 
         photofeatures = {**carboncenters,**nitrogencenters}
+        
         img.create_group('photos')
         for center in list(photofeatures.keys()):
             img['photos'].attrs['%.2f'%center] = float(photofeatures[center])
@@ -99,6 +107,10 @@ def main():
         img.create_dataset('energies',data=energies[:-1])
 
         hits = img.create_group('hits')
+        
+        # plt.imshow(h.T, extent=[energies.min(), energies.max(), angles.min(), angles.max()],
+        #                origin='lower', aspect='auto', cmap='viridis')
+        # plt.show()
         for a in range(len(ens)):
             #print(len(ens[a]))
             hits.create_dataset('%i'%a,data=ens[a][:])
