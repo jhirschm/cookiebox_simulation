@@ -119,6 +119,7 @@ def main():
         augerfeatures = {**naugerfeatures, **caugerfeatures, **oaugerfeatures}
 
         img.create_group('augers')
+        
         for center in list(augerfeatures.keys()):
             img['augers'].attrs['%.2f'%center] = float(augerfeatures[center])
             #print('%.2f'%center)
@@ -128,14 +129,15 @@ def main():
             carboncenters = {center-284.2 : 0.5}
             nvalencecenters = {center-37.3 : 0.5}
             ovalencecenters = {center-41.6 : 0.5}
-
-        photofeatures = {**carboncenters,**nitrogencenters}
+        if num_pulses > 0:
+            photofeatures = {**carboncenters,**nitrogencenters}
         
         img.create_group('photos')
         for center in list(photofeatures.keys()):
             img['photos'].attrs['%.2f'%center] = float(photofeatures[center])
 
-        valencefeatures = {**nvalencecenters,**ovalencecenters}
+        if num_pulses > 0:
+            valencefeatures = {**nvalencecenters,**ovalencecenters}
         img.create_group('valencephotos')
         for center in list(valencefeatures.keys()):
             img['valencephotos'].attrs['%.2f'%center] = float(valencefeatures[center])
