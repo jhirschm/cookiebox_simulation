@@ -73,26 +73,26 @@ def main():
         ephases_list = []
 
         valid_pulse = False
-        for p in range(num_pulses):
+        while len(esase_list) < num_pulses:
             esase = np.random.normal(ecentral, etotalwidth)
             ewidths = np.random.gamma(1.5, 0.125) + 0.5
             ephases = np.random.uniform(0.0, 2.0 * np.pi)
-            if p == 0:
-                esase_list.append(esase)
-                ewidths_list.append(ewidths)
-                ephases_list.append(ephases)
-            else:
-                while valid_pulse == False:
-                    valid_pulse = check_pulse_overlap(esase, ewidths, ephases, esase_list, ewidths_list, ephases_list)
-                    if valid_pulse == True:
-                        esase_list.append(esase)
-                        ewidths_list.append(ewidths)
-                        ephases_list.append(ephases)
-                        break
-                    else:
-                        esase = np.random.normal(ecentral, etotalwidth)
-                        ewidths = np.random.gamma(1.5, 0.125) + 0.5
-                        ephases = np.random.uniform(0.0, 2.0 * np.pi)
+            while valid_pulse == False:
+                if len(esase_list) == 0:
+                    esase_list.append(esase)
+                    ewidths_list.append(ewidths)
+                    ephases_list.append(ephases)
+                    break
+                valid_pulse = check_pulse_overlap(esase, ewidths, ephases, esase_list, ewidths_list, ephases_list)
+                if valid_pulse == True:
+                    esase_list.append(esase)
+                    ewidths_list.append(ewidths)
+                    ephases_list.append(ephases)
+                    break
+                else:
+                    esase = np.random.normal(ecentral, etotalwidth)
+                    ewidths = np.random.gamma(1.5, 0.125) + 0.5
+                    ephases = np.random.uniform(0.0, 2.0 * np.pi)
         print(esase_list)
         print(ewidths_list)
         print(ephases_list)
