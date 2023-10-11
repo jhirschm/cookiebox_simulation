@@ -88,6 +88,7 @@ def main():
                         esase_list.append(esase)
                         ewidths_list.append(ewidths)
                         ephases_list.append(ephases)
+                        break
                     else:
                         esase = np.random.normal(ecentral, etotalwidth)
                         ewidths = np.random.gamma(1.5, 0.125) + 0.5
@@ -163,6 +164,7 @@ def main():
             c4 = np.random.uniform(-(c0+c2),c0+c2)
             img['legcoeffs'][p,:] = [c0, 0., c2, 0., c4]
             poldist = np.polynomial.legendre.Legendre(img['legcoeffs'][p,:])(np.cos(angles[:-1]))
+            print(poldist)
             for a in range(nangles):
                 ncounts = int(poldist[a] * scale)
                 augercounts = int(scale)
