@@ -5,6 +5,33 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 
+def check_pulse_overlap(new_esase, new_width, new_phase, esase_list, ewidths_list, ephases_list):
+    new_pulse_valid = True
+    current_num_pulses = len(esase_list)
+    # sort lists by esase
+    # print(esase_list)
+    # print(ewidths_list)
+    # print(ephases_list)
+
+    # combined_lists = list(zip(esase_list, ewidths_list, ephases_list))
+    # sorted_lists = combined_lists.sort(key=lambda x: x[0])
+    # esase_list, ewidths_list, ephases_list = zip(*sorted_lists)
+
+    # print(esase_list)
+    # print(ewidths_list)
+    # print(ephases_list)
+
+    for p in range(current_num_pulses):
+        if np.abs(new_esase - esase_list[p]) > (ewidths_list[p] + new_width):
+            new_pulse_valid = new_pulse_valid
+        else:
+            if np.abs(new_phase - ephases_list[p]) > np.pi/8:
+                new_pulse_valid = new_pulse_valid
+            else:
+                new_pulse_valid = False
+                return new_pulse_valid
+    return new_pulse_valid
+
 def main():
     print(sys.argv)
     if len(sys.argv)<2:
@@ -45,16 +72,38 @@ def main():
         ewidths_list = []
         ephases_list = []
 
-        while len(esase_list) < num_pulses: # prevents repeated features
+        valid_pulse = False
+        for p in range(num_pulses):
             esase = np.random.normal(ecentral, etotalwidth)
             ewidths = np.random.gamma(1.5, 0.125) + 0.5
             ephases = np.random.uniform(0.0, 2.0 * np.pi)
-
-            # Check for duplicates in the lists
-            if esase not in esase_list and ewidths not in ewidths_list and ephases not in ephases_list:
+            if p == 0:
                 esase_list.append(esase)
                 ewidths_list.append(ewidths)
                 ephases_list.append(ephases)
+            else:
+                while valid_pulse == False:
+                    valid_pulse = check_pulse_overlap(esase, ewidths, ephases, esase_list, ewidths_list, ephases_list)
+                    if valid_pulse == True:
+                        esase_list.append(esase)
+                        ewidths_list.append(ewidths)
+                        ephases_list.append(ephases)
+                    else:
+                        esase = np.random.normal(ecentral, etotalwidth)
+                        ewidths = np.random.gamma(1.5, 0.125) + 0.5
+                        ephases = np.random.uniform(0.0, 2.0 * np.pi)
+        # while len(esase_list) < num_pulses: # prevents repeated features
+        #     esase = np.random.normal(ecentral, etotalwidth)
+        #     ewidths = np.random.gamma(1.5, 0.125) + 0.5
+        #     ephases = np.random.uniform(0.0, 2.0 * np.pi)
+
+        #     # Check for duplicates in the lists
+        #     if esase not in esase_list and ewidths not in ewidths_list and ephases not in ephases_list:
+        #         #make eval on esase and ephases...take mean of ewidths and use that in definition of close (or twice width)
+        #         # .1 radians or .25 radians
+        #         esase_list.append(esase)
+        #         ewidths_list.append(ewidths)
+        #         ephases_list.append(ephases)
 
         img.attrs['npulses'] = num_pulses 
         # print(img.attrs['npulses'])
