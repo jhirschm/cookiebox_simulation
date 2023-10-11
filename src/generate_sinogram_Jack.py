@@ -131,6 +131,8 @@ def main():
             ovalencecenters = {center-41.6 : 0.5}
         if num_pulses > 0:
             photofeatures = {**carboncenters,**nitrogencenters}
+        else:
+            photofeatures = {}
         
         img.create_group('photos')
         for center in list(photofeatures.keys()):
@@ -138,6 +140,8 @@ def main():
 
         if num_pulses > 0:
             valencefeatures = {**nvalencecenters,**ovalencecenters}
+        else:
+            valencefeatures = {}
         img.create_group('valencephotos')
         for center in list(valencefeatures.keys()):
             img['valencephotos'].attrs['%.2f'%center] = float(valencefeatures[center])
