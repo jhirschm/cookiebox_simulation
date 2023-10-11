@@ -65,7 +65,7 @@ def main():
         img = h5f.create_group('img%05i'%i)
 
         # Set the desired number of pulses
-        num_pulses = int(np.random.uniform(0, 6)) # allowing for 0-5 pulses
+        num_pulses = int(np.random.uniform(1, 6)) # allowing for 0-5 pulses
 
         # Initialize lists to store features
         esase_list = []
