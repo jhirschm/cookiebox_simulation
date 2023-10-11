@@ -65,7 +65,7 @@ def main():
         img = h5f.create_group('img%05i'%i)
 
         # Set the desired number of pulses
-        num_pulses = int(np.random.uniform(1, 6)) # allowing for 0-5 pulses
+        num_pulses = int(np.random.uniform(1, 6)) # allowing for 0-5 pulses, temp changed 1 to 5
 
         # Initialize lists to store features
         esase_list = []
@@ -92,6 +92,9 @@ def main():
                         esase = np.random.normal(ecentral, etotalwidth)
                         ewidths = np.random.gamma(1.5, 0.125) + 0.5
                         ephases = np.random.uniform(0.0, 2.0 * np.pi)
+        print(esase_list)
+        print(ewidths_list)
+        print(ephases_list)
         # while len(esase_list) < num_pulses: # prevents repeated features
         #     esase = np.random.normal(ecentral, etotalwidth)
         #     ewidths = np.random.gamma(1.5, 0.125) + 0.5
