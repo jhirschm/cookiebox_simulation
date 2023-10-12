@@ -21,8 +21,8 @@ def check_pulse_overlap(new_esase, new_width, new_phase, esase_list, ewidths_lis
     # print(ewidths_list)
     # print(ephases_list)
 
-    for p in range(current_num_pulses):
-        if np.abs(new_esase - esase_list[p]) > (ewidths_list[p] + new_width):
+    for p in range(current_num_pulses): 
+        if np.abs(new_esase - esase_list[p]) > (ewidths_list[p] + new_width): #any statment to look thoruhg list simulatneously
             new_pulse_valid = new_pulse_valid
         else:
             if np.abs(new_phase - ephases_list[p]) > np.pi/8:
@@ -72,23 +72,26 @@ def main():
         ewidths_list = []
         ephases_list = []
 
-        valid_pulse = False
         while len(esase_list) < num_pulses:
+            valid_pulse = False
+
             esase = np.random.normal(ecentral, etotalwidth)
             ewidths = np.random.gamma(1.5, 0.125) + 0.5
             ephases = np.random.uniform(0.0, 2.0 * np.pi)
-            while valid_pulse == False:
-                if len(esase_list) == 0:
+
+
+            if len(esase_list) == 0:
                     esase_list.append(esase)
                     ewidths_list.append(ewidths)
                     ephases_list.append(ephases)
-                    break
+                    valid_pulse = True
+
+            while valid_pulse == False:
                 valid_pulse = check_pulse_overlap(esase, ewidths, ephases, esase_list, ewidths_list, ephases_list)
                 if valid_pulse == True:
                     esase_list.append(esase)
                     ewidths_list.append(ewidths)
                     ephases_list.append(ephases)
-                    break
                 else:
                     esase = np.random.normal(ecentral, etotalwidth)
                     ewidths = np.random.gamma(1.5, 0.125) + 0.5
@@ -126,10 +129,10 @@ def main():
             #print('%.2f'%center)
             #print(img['augers'].attrs['%.2f'%center])
         for center in (img.attrs['esase']):
-            nitrogencenters = {center-409.9 : 0.5}
-            carboncenters = {center-284.2 : 0.5}
-            nvalencecenters = {center-37.3 : 0.5}
-            ovalencecenters = {center-41.6 : 0.5}
+            nitrogencenters = {center-409.9 : 10.5} #changing for observation of width
+            carboncenters = {center-284.2 : 10.5}
+            nvalencecenters = {center-37.3 :10.5}
+            ovalencecenters = {center-41.6 : 10.5}
         if num_pulses > 0:
             photofeatures = {**carboncenters,**nitrogencenters}
         else:
