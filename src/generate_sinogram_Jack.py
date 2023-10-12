@@ -128,11 +128,11 @@ def main():
             img['augers'].attrs['%.2f'%center] = float(augerfeatures[center])
             #print('%.2f'%center)
             #print(img['augers'].attrs['%.2f'%center])
-        for center in (img.attrs['esase']):
-            nitrogencenters = {center-409.9 : 10.5} #changing for observation of width
-            carboncenters = {center-284.2 : 10.5}
-            nvalencecenters = {center-37.3 :10.5}
-            ovalencecenters = {center-41.6 : 10.5}
+        for center, width in zip(img.attrs['esase'], img.attrs['ewidths']):
+            nitrogencenters = {center-409.9 : width} #changing for observation of width
+            carboncenters = {center-284.2 : width}
+            nvalencecenters = {center-37.3 :width}
+            ovalencecenters = {center-41.6 : width}
         if num_pulses > 0:
             photofeatures = {**carboncenters,**nitrogencenters}
         else:
