@@ -1,0 +1,4 @@
+starting run 1 at: Thu Oct 12 00:36:35 PDT 2023
+['generate_sinogram_Jack.py', '/sdf/group/lcls/ds/scratch/jhirschm/MRCO_Sim_Data/Oct12_2023_simdata', '100000']
+/sdf/group/lcls/ds/scratch/jhirschm/MRCO_Sim_Data/Oct12_2023_simdata
+Finished at: Thu Oct 12 02:37:22 PDT 2023

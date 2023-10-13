@@ -1,0 +1,2 @@
+starting run 1 at: Wed Oct 11 13:00:32 PDT 2023
+slurmstepd: error: *** JOB 13135809 ON tur026 CANCELLED AT 2023-10-12T00:36:22 ***
