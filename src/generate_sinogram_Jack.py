@@ -22,7 +22,11 @@ def check_pulse_overlap(new_esase, new_width, new_phase, esase_list, ewidths_lis
     # print(ephases_list)
 
     for p in range(current_num_pulses): 
-        if np.abs(new_esase - esase_list[p]) > (ewidths_list[p] + new_width): #any statment to look thoruhg list simulatneously
+        # width_1 = ewidths_list[p]
+        # width_2 = new_width
+        width_1 = 0.5 #Modified for 0.5 ev version
+        width_2 = 0.5
+        if np.abs(new_esase - esase_list[p]) > (width_1+width_2): #any statment to look thoruhg list simulatneously
             new_pulse_valid = new_pulse_valid
         else:
             if np.abs(new_phase - ephases_list[p]) > np.pi/8:
@@ -128,11 +132,18 @@ def main():
             img['augers'].attrs['%.2f'%center] = float(augerfeatures[center])
             #print('%.2f'%center)
             #print(img['augers'].attrs['%.2f'%center])
+        # for center, width in zip(img.attrs['esase'], img.attrs['ewidths']):
+        #     nitrogencenters = {center-409.9 : width} #changing for observation of width
+        #     carboncenters = {center-284.2 : width}
+        #     nvalencecenters = {center-37.3 :width}
+        #     ovalencecenters = {center-41.6 : width}
+
         for center, width in zip(img.attrs['esase'], img.attrs['ewidths']):
-            nitrogencenters = {center-409.9 : width} #changing for observation of width
-            carboncenters = {center-284.2 : width}
-            nvalencecenters = {center-37.3 :width}
-            ovalencecenters = {center-41.6 : width}
+            nitrogencenters = {center-409.9 : .5} 
+            carboncenters = {center-284.2 : .5}
+            nvalencecenters = {center-37.3 :.5}
+            ovalencecenters = {center-41.6 : .5}
+
         if num_pulses > 0:
             photofeatures = {**carboncenters,**nitrogencenters}
         else:
